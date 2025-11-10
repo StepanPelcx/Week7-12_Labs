@@ -1,4 +1,5 @@
 
+import secrets
 import re
 import bcrypt
 import os
@@ -63,7 +64,7 @@ def user_exists(username):
     return False
 
 
-def register_user(username, password):
+def register_user(username, password, role="user"):
     # TODO: Check if the username already exists
     if user_exists(username) == True:
         return print(f"The user {username} already exist.")
@@ -72,7 +73,7 @@ def register_user(username, password):
 
     # TODO: Append the new user to the file
     with open(USER_DATA_FILE, "a") as f:
-        f.write(f"{username},{hashed_str}\n")
+        f.write(f"{username},{hashed_str}, {role}\n")
     # Format: username,hashed_password
     return print(f"The user {username} succesfully registered!")
 
@@ -113,6 +114,8 @@ def validate_username(username):
 def validate_password(password):
     if len(password) < 8:
         return False,  "The password must contain 8 characters at least."
+    if len(password) >= 24:
+        return False, "The password must contain 24 characters at most."
     if not re.search(r"[A-Z]", password):
         return False, "The password must contain at least one upper letter."
     if not re.search(r"[a-z]", password):
@@ -123,6 +126,81 @@ def validate_password(password):
         return False, "The password must contain at least one special character."
 
     return True, "Password is strong"
+
+
+def check_password_strength(password):
+    # Implement logic based on:
+    score = 0
+# - Length
+    if len(password) > 16:
+        if len(password) > 20:
+            score += 10
+        else:
+            score += 5
+
+    numb = 0
+    sc = 0
+    ul = 0
+# - Presence of uppercase, lowercase, digits, special characters
+    for digit in password:
+        if digit.isdigit():
+            numb += 1
+        if digit.isupper():
+            ul += 1
+        if not digit.alnum():
+            sc += 1
+
+    if numb > 2:
+        score += 10
+    if sc > 1:
+        score += 10
+    if ul > 2:
+        score += 10
+
+# - Common password patterns
+    common_passwords = [
+        "Password1!",
+        "Welcome123!",
+        "Admin@123",
+        "Qwerty123!",
+        "Summer2024!",
+        "Winter2023@",
+        "HelloWorld1!",
+        "Test@1234",
+        "ILoveYou2!",
+        "Sunshine@9",
+        "Abc12345!",
+        "Football2025#",
+        "London2024$",
+        "Chocolate1!",
+        "MyPass@123",
+        "Secure123#",
+        "HappyDay7@",
+        "Dragon99!",
+        "Freedom#22",
+        "Monkey@88",
+        "StarLight7!",
+        "Galaxy2025!",
+        "BlueSky@11",
+        "Rainbow#123"
+    ]
+
+    for item in common_passwords:
+        if password == item:
+            return "Your password is one of the most used. Try another."
+
+    if score >= 25:
+        return "Strong password"
+    elif score >= 10:
+        return "Medium password"
+    else:
+        return "Weak password"
+
+
+def create_session(username):
+    token = secrets.token_hex(16)
+    # Store token with timestamp
+    return token
 
 
 def display_menu():
@@ -140,6 +218,7 @@ def display_menu():
 def main():
     """Main program loop."""
     print("\nWelcome to the Week 7 Authentication System!")
+    login_count = 0
     while True:
         display_menu()
         choice = input("\nPlease select an option (1-3): ").strip()
@@ -164,16 +243,24 @@ def main():
                 print("Error: Passwords do not match.")
                 continue
 # Register the user
-            register_user(username, password)
+            role = input("Please enter a role of this user:")
+            register_user(username, password, role)
         elif choice == '2':
-            # Login flow
-            print("\n--- USER LOGIN ---")
-            username = input("Enter your username: ").strip()
-            password = input("Enter your password: ").strip()
+            if login_count < 3:
+                login_count += 1
+                # Login flow
+                print("\n--- USER LOGIN ---")
+                username = input("Enter your username: ").strip()
+                password = input("Enter your password: ").strip()
 # Attempt login
-            if login_user(username, password):
-                print("\nYou are now logged in.")
-                print("(In a real application, you would now access the ...")
+                if login_user(username, password):
+                    create_session(username)
+                    print("\nYou are now logged in.")
+                    print("(In a real application, you would now access the ...")
+            else:
+                print(
+                    "You attempted to login 3 times unsaccessfully. wait for 5 minutes to try again.")
+                login_count = 0
 # Optional: Ask if they want to logout or exit
                 input("\nPress Enter to return to main menu...")
         elif choice == '3':
