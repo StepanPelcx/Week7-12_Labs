@@ -11,7 +11,7 @@ print(df.info())
 print(df.isnull().sum())
 
 # Connect to database
-conn = sqlite3.connect('DATA/intelligence_platform.db')
+conn = sqlite3.connect('intelligence_platform.db')
 # Bulk insert all rows
 df.to_sql('cyber_incidents', conn, if_exists='append', index=False)
 print("✓ Data loaded successfully")
