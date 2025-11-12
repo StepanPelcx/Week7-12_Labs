@@ -75,7 +75,7 @@ def register_user(username, password, role="user"):
     """Returns if the user has been registered."""
     # TODO: Check if the username already exists
     if user_exists(username) == True:
-        return print(f"The user {username} already exists.")
+        return False, print(f"The user {username} already exists.")
     # TODO: Hash the password
     hashed_str = hash_password(password)
 
@@ -83,7 +83,7 @@ def register_user(username, password, role="user"):
     with open(USER_DATA_FILE, "a") as f:
         f.write(f"{username},{hashed_str}, {role}\n")
     # Format: username,hashed_password
-    return print(f"The user {username} succesfully registered!")
+    return True, print(f"The user {username} succesfully registered!")
 
 
 def login_user(username, password):
@@ -265,18 +265,27 @@ def main():
                 if not is_valid:
                     print(f"Error: {error_msg}")
                     continue
-            # Confirm password
+                else:
+                    break
+            while True:
+                # Confirm password
                 password_confirm = input("Confirm password: ").strip()
                 if password != password_confirm:
                     print("Error: Passwords do not match.")
                     continue
-            # Register the user
-                role = input(
-                    "Please enter a role of this user:").lower().strip()
-                register_user(username, password, role)
+                else:
+                    # Register the user
+                    if not register_user(username, password, role):
+                        print(register_user(username, password, role))
+                        continue
+                    else:
+                        role = input(
+                            "Please enter a role of this user:").lower().strip()
+                        register_user(username, password, role)
+                        break
 
         elif choice == '2':
-            if login_count < 3:
+            while login_count < 3:
                 login_count += 1
                 # Login flow
                 print("\n--- USER LOGIN ---")
@@ -287,9 +296,12 @@ def main():
                     create_session(username)
                     print("\nYou are now logged in.")
                     print("(In a real application, you would now access the ...")
+                else:
+                    print(login_user(username, password))
+                    continue
             else:
                 print(
-                    "You attempted to login 3 times unsaccessfully. wait for 5 minutes to try again.")
+                    "You attempted to login 3 times unsuccessfully. wait for 5 minutes to try again.")
                 login_count = 0
 # Optional: Ask if they want to logout or exit
                 input("\nPress Enter to return to main menu...")
