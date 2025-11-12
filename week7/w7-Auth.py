@@ -9,7 +9,8 @@ USER_DATA_FILE = "users.txt"
 
 
 def hash_password(plain_text_password):
-    # TODO:Encode the password to bytes (bcrypt requires byte strings)
+    """Returns a hashed password, created from plain text password."""
+# TODO:Encode the password to bytes (bcrypt requires byte strings)
     password_bytes = plain_text_password.encode('utf-8')
 # TODO: Generate a salt using bcrypt.gensalt()
     salt = bcrypt.gensalt()
@@ -21,6 +22,7 @@ def hash_password(plain_text_password):
 
 
 def verify_password(plain_text_password, hashed_password):
+    """It returns True, if password matches and False, if not."""
     # TODO: Encode both the plaintext password and the stored hash to byt
     password_bytes = plain_text_password.encode('utf-8')
     hashed_password = hashed_password.encode('utf-8')
@@ -30,6 +32,7 @@ def verify_password(plain_text_password, hashed_password):
     return match
 
 
+"""
 # TEMPORARY TEST CODE - Remove after testing
 test_password = "SecurePassword123"
 # Test hashing
@@ -43,9 +46,11 @@ print(f"\nVerification with correct password: {is_valid}")
 # Test verification with incorrect password
 is_invalid = verify_password("WrongPassword", hashed)
 print(f"Verification with incorrect password: {is_invalid}")
+"""
 
 
 def user_exists(username):
+    """Returns True, if a user exists in a database and False, if not."""
     # TODO: Handle the case where the file doesn't exist yet
     try:
         with open(USER_DATA_FILE, "r"):
@@ -55,8 +60,10 @@ def user_exists(username):
             pass
 # TODO: Read the file and check each line for the username
     finally:
+        # striping username
         username = username.strip()
         with open(USER_DATA_FILE, "r") as f:
+            # loop for checking if the user is in the database
             for line in f:
                 existing_username = line.split(",")[0]
                 if existing_username == username:
@@ -65,9 +72,10 @@ def user_exists(username):
 
 
 def register_user(username, password, role="user"):
+    """Returns if the user has been registered."""
     # TODO: Check if the username already exists
     if user_exists(username) == True:
-        return print(f"The user {username} already exist.")
+        return print(f"The user {username} already exists.")
     # TODO: Hash the password
     hashed_str = hash_password(password)
 
@@ -79,12 +87,13 @@ def register_user(username, password, role="user"):
 
 
 def login_user(username, password):
+    """Returns if the has been registered successfully."""
     # TODO: Handle the case where no users are registered yet
     with open(USER_DATA_FILE, "r") as f:
         user = f.read()
         if not user:
-            return print("No users are registered.")
-# TODO: Search for the username in the file
+            return False, print("No users are registered.")
+    # TODO: Search for the username in the file
     with open(USER_DATA_FILE, "r") as f:
         for line in f:
             existing_username = line.split(",")[0]
@@ -92,26 +101,29 @@ def login_user(username, password):
                 # TODO: If username matches, verify the password
                 existing_password = line.split(",")[1].strip()
                 if verify_password(password, existing_password):
-                    return print("The user logged in successfully.")
+                    return True, print("The user logged in successfully.")
                 else:
-                    return print("Invalid password.")
-# TODO: If we reach here, the username was not found
-        return print(f"No user named {username} found.")
+                    return False, print("Invalid password.")
+    # TODO: If we reach here, the username was not found
+        return print(f"No user named {username} was not found.")
 
 
 def validate_username(username):
+    """Returns if the username is valid."""
+    # striping the username
     username = username.strip()
-
+    # checking the username
     if len(username) < 3:
-        return False, "The username has to be more then 5 characters."
+        return False, "Your username is to short. The username has to be more then 2 characters."
     if not username.isalnum():
-        return False, "The username has to contain only letters and numbers."
+        return False, "Your username contain special characters. The username has to contain only letters and numbers."
     if len(username) > 20:
-        return False, "The username has to be 20 characters long at most."
-    return True, "The username is correct."
+        return False, "Your username is to long. The username has to be 20 characters long at most."
+    return True, "The given username is valid."
 
 
 def validate_password(password):
+    """Returns if the password is valid."""
     if len(password) < 8:
         return False,  "The password must contain 8 characters at least."
     if len(password) >= 24:
@@ -129,19 +141,24 @@ def validate_password(password):
 
 
 def check_password_strength(password):
+    """Returns how strong the password is(weak, medium, strong)."""
     # Implement logic based on:
+    # creating variable to store score for password strenght
     score = 0
-# - Length
+    # - Length
+    # checking length
     if len(password) > 16:
         if len(password) > 20:
             score += 10
         else:
             score += 5
 
+    # creating variables for checking what characters are in the password
     numb = 0
     sc = 0
     ul = 0
-# - Presence of uppercase, lowercase, digits, special characters
+    # - Presence of uppercase, lowercase, digits, special characters
+    # counting how many of each characters are in the password
     for digit in password:
         if digit.isdigit():
             numb += 1
@@ -150,6 +167,7 @@ def check_password_strength(password):
         if not digit.alnum():
             sc += 1
 
+    # adding to score based on each character variable value
     if numb > 2:
         score += 10
     if sc > 1:
@@ -185,19 +203,21 @@ def check_password_strength(password):
         "Rainbow#123"
     ]
 
+    # checking if password match one of the most common ones
     for item in common_passwords:
         if password == item:
-            return "Your password is one of the most used. Try another."
+            return False, "Your password is one of the most used. Try another."
 
     if score >= 25:
-        return "Strong password"
+        return True, "Strong password"
     elif score >= 10:
-        return "Medium password"
+        return True, "Medium password"
     else:
-        return "Weak password"
+        return True, "Weak password"
 
 
 def create_session(username):
+    """Returns token for the user."""
     token = secrets.token_hex(16)
     # Store token with timestamp
     return token
@@ -218,33 +238,43 @@ def display_menu():
 def main():
     """Main program loop."""
     print("\nWelcome to the Week 7 Authentication System!")
+    # variable for counting login attempts
     login_count = 0
     while True:
         display_menu()
         choice = input("\nPlease select an option (1-3): ").strip()
+
         if choice == '1':
-            # Registration flow
-            print("\n--- USER REGISTRATION ---")
-            username = input("Enter a username: ").strip()
-    # Validate username
-            is_valid, error_msg = validate_username(username)
-            if not is_valid:
-                print(f"Error: {error_msg}")
-                continue
-            password = input("Enter a password: ").strip()
-    # Validate password
-            is_valid, error_msg = validate_password(password)
-            if not is_valid:
-                print(f"Error: {error_msg}")
-                continue
-# Confirm password
-            password_confirm = input("Confirm password: ").strip()
-            if password != password_confirm:
-                print("Error: Passwords do not match.")
-                continue
-# Register the user
-            role = input("Please enter a role of this user:")
-            register_user(username, password, role)
+
+            while True:
+                # Registration flow
+                print("\n--- USER REGISTRATION ---")
+                username = input("Enter a username: ").strip()
+        # Validate username
+                is_valid, error_msg = validate_username(username)
+                if not is_valid:
+                    print(f"Error: {error_msg}")
+                    continue
+                else:
+                    break
+
+            while True:
+                password = input("Enter a password: ").strip()
+            # Validate password
+                is_valid, error_msg = validate_password(password)
+                if not is_valid:
+                    print(f"Error: {error_msg}")
+                    continue
+            # Confirm password
+                password_confirm = input("Confirm password: ").strip()
+                if password != password_confirm:
+                    print("Error: Passwords do not match.")
+                    continue
+            # Register the user
+                role = input(
+                    "Please enter a role of this user:").lower().strip()
+                register_user(username, password, role)
+
         elif choice == '2':
             if login_count < 3:
                 login_count += 1
@@ -263,6 +293,7 @@ def main():
                 login_count = 0
 # Optional: Ask if they want to logout or exit
                 input("\nPress Enter to return to main menu...")
+
         elif choice == '3':
             # Exit
             print("\nThank you for using the authentication system.")
