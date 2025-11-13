@@ -1,7 +1,7 @@
 import pandas as pd
 import sqlite3
 # Read CSV into DataFrame
-df = pd.read_csv("/Users/stepanpelc/Library/CloudStorage/OneDrive-MiddlesexUniversity/Lessons/1 Year/Programming for Data Communications and Networks/Week7-12_Labs/week8/cyber incidents.csv")
+df = pd.read_csv("/Users/stepanpelc/Library/CloudStorage/OneDrive-MiddlesexUniversity/Lessons/1 Year/Programming for Data Communications and Networks/Week7-12_Labs/CW2_M01087679_CST1510/DATA/cyber_incidents.csv")
 
 # View first 5 rows
 print(df.head())
