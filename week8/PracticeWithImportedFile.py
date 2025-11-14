@@ -16,7 +16,7 @@ conn = sqlite3.connect('intelligence_platform.db')
 df.to_sql('cyber_incidents', conn, if_exists='append', index=False)
 print("✓ Data loaded successfully")
 
-# Count rows in database
+# Count rows in database.
 cursor = conn.cursor()
 cursor.execute("SELECT COUNT(*) FROM cyber_incidents")
 count = cursor.fetchone()[0]
