@@ -22,4 +22,5 @@ cursor.execute("SELECT COUNT(*) FROM cyber_incidents")
 count = cursor.fetchone()[0]
 print(f"Loaded {count} incidents")  # View sample data
 cursor.execute("SELECT * FROM cyber_incidents LIMIT 3")
-for row in cursor.fetchall()
+for row in cursor.fetchall():
+    print(row)
