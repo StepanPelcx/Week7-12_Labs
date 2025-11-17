@@ -1,3 +1,4 @@
+from pathlib import Path
 from app.data.db import connect_database
 
 def get_user_by_username(username):
@@ -46,7 +47,7 @@ def create_cyber_incidents_table(conn):
     # TODO: Write CREATE TABLE IF NOT EXISTS SQL statement
     # Follow the pattern from create_users_table()
     statement = ("""
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS cyber_incidents (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             date TEXT,
             incident_type TEXT,
@@ -89,7 +90,7 @@ def create_datasets_metadata_table(conn):
     # TODO: Write CREATE TABLE IF NOT EXISTS SQL statement
     # Follow the pattern from create_users_table()
     statement = ("""
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS datasets_metadata (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             dataset_name TEXT NOT NULL,
             category TEXT,
@@ -135,7 +136,7 @@ def create_it_tickets_table(conn):
     # TODO: Write CREATE TABLE IF NOT EXISTS SQL statement
     # Follow the pattern from create_users_table()
     statement = ("""
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS it_tickets (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             ticket_id TEXT UNIQUE NOT NULL,
             priority TEXT,
