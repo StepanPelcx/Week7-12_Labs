@@ -6,11 +6,11 @@ def insert_incident(date, incident_type, severity, status, description, reported
     """"Insert new incident.""""
     conn = connect_database()
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.execute(
         INSERT INTO cyber_incidents
         (date, incident_type, severity, status, description, reported_by)
         VALUES (?, ?, ?, ?, ?, ?)
-    """, (date, incident_type, severity, status, description, reported_by)
+    , (date, incident_type, severity, status, description, reported_by)
     )
     conn.commit()
     incident_id = cursor.lastrowid
@@ -54,7 +54,6 @@ def insert_incident(conn, date, incident_type, severity, status, description, re
     # TODO: Return cursor.lastrowid
     return incident_id
 
-
 def get_all_incidents():
     """Get all incidents as DataFrame."""
     conn = connect_database()
@@ -63,4 +62,3 @@ def get_all_incidents():
     )
     conn.close()
     return df
-
