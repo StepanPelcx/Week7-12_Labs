@@ -164,3 +164,4 @@ def migrate_users_from_file(conn, filepath="DATA/users.txt"):
 
     print(f"\nTotal users: {len(users)}")
     conn.close()
+    pass
