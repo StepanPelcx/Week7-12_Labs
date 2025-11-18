@@ -1,4 +1,5 @@
 import bcrypt
+import sqlite3
 from pathlib import Path
 from app.data.db import connect_database
 from app.data.users import get_user_by_username, insert_user
