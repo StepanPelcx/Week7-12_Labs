@@ -8,7 +8,8 @@ from pathlib import Path
 
 USER_DATA_PATH = Path("DATA").resolve()
 USER_DATA_FILE = USER_DATA_PATH / "users.txt"
-USER_DATA_FILE = USER_DATA_FILE.resolve()
+
+
 
 def hash_password(plain_text_password):
     """Returns a hashed password, created from plain text password."""
@@ -93,10 +94,13 @@ def register_user(username, password):
 def login_user(username, password):
     """Returns if the has been registered successfully."""
     # TODO: Handle the case where no users are registered yet
-    with open(USER_DATA_FILE, "r") as f:
-        user = f.read()
-        if not user:
-            return False, print("No users are registered.")
+    try:
+        with open(USER_DATA_FILE, "r") as f:
+            user = f.read()
+            if not user:
+                return False, print("No users are registered.")
+    except FileNotFoundError:
+        return "No users are registered."
     # TODO: Search for the username in the file
     with open(USER_DATA_FILE, "r") as f:
         for line in f:
