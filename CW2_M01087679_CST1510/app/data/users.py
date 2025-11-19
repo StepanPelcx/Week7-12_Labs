@@ -1,5 +1,15 @@
 from pathlib import Path
+import sqlite3
 from app.data.db import connect_database
+
+
+# Define paths
+DATA_DIR = Path("DATA")
+DB_PATH = DATA_DIR / "intelligence_platform.db"
+
+# Create DATA folder if it doesn't exist
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
 
 def get_user_by_username(username):
     """Retrieve user by username."""
@@ -24,136 +34,53 @@ def insert_user(username, password_hash, role='user'):
     conn.commit()
     conn.close()
 
+#defining the path of my db
+DB_PATH = Path("DATA") / "intelligent_platform.db"
 
-def create_cyber_incidents_table(conn):
+
+def migrate_users_from_file(conn, filepath=DATA_DIR / "users.txt"):
     """
-    Create the cyber_incidents table.
+    Migrate users from users.txt to the database.
     
-    TODO: Implement this function following the users table example above.
+    This is a COMPLETE IMPLEMENTATION as an example.
     
-    Required columns:
-    - id: INTEGER PRIMARY KEY AUTOINCREMENT
-    - date: TEXT (format: YYYY-MM-DD)
-    - incident_type: TEXT (e.g., 'Phishing', 'Malware', 'DDoS')
-    - severity: TEXT (e.g., 'Critical', 'High', 'Medium', 'Low')
-    - status: TEXT (e.g., 'Open', 'Investigating', 'Resolved', 'Closed')
-    - description: TEXT
-    - reported_by: TEXT (username of reporter)
-    - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    Args:
+        conn: Database connection
+        filepath: Path to users.txt file
     """
-    # TODO: Get a cursor from the connection
-    conn = connect_database()
+    if not filepath.exists():
+        print(f"⚠️  File not found: {filepath}")
+        print("   No users to migrate.")
+        return
+    
     cursor = conn.cursor()
-    # TODO: Write CREATE TABLE IF NOT EXISTS SQL statement
-    # Follow the pattern from create_users_table()
-    statement = ("""
-        CREATE TABLE IF NOT EXISTS cyber_incidents (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date TEXT,
-            incident_type TEXT,
-            severity TEXT,
-            status TEXT,
-            description TEXT,
-            reposted_by TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    # TODO: Execute the SQL statement
-    cursor.execute(statement)
-    # TODO: Commit the changes
+    migrated_count = 0
+    
+    with open(filepath, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            
+            # Parse line: username,password_hash
+            parts = line.split(',')
+            if len(parts) >= 2:
+                username = parts[0]
+                password_hash = parts[1]
+                
+                # Insert user (ignore if already exists)
+                try:
+                    cursor.execute(
+                        "INSERT OR IGNORE INTO users (username, password_hash, role) VALUES (?, ?, ?)",
+                        (username, password_hash, 'user')
+                    )
+                    if cursor.rowcount > 0:
+                        migrated_count += 1
+                except sqlite3.Error as e:
+                    print(f"Error migrating user {username}: {e}")
+    
     conn.commit()
-    # TODO: Print success message
-    return print("✅ Cyber incidents table created successfully!")
-    pass
+    print(f"✅ Migrated {migrated_count} users from {filepath.name}")
 
 
-def create_datasets_metadata_table(conn):
-    """
-    Create the datasets_metadata table.
-    
-    TODO: Implement this function following the users table example.
-    
-    Required columns:
-    - id: INTEGER PRIMARY KEY AUTOINCREMENT
-    - dataset_name: TEXT NOT NULL
-    - category: TEXT (e.g., 'Threat Intelligence', 'Network Logs')
-    - source: TEXT (origin of the dataset)
-    - last_updated: TEXT (format: YYYY-MM-DD)
-    - record_count: INTEGER
-    - file_size_mb: REAL
-    - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    """
-    # TODO: Implement following the users table pattern
-    # TODO: Get a cursor from the connection
-    conn = connect_database()
-    cursor = conn.cursor()
-    # TODO: Write CREATE TABLE IF NOT EXISTS SQL statement
-    # Follow the pattern from create_users_table()
-    statement = ("""
-        CREATE TABLE IF NOT EXISTS datasets_metadata (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            dataset_name TEXT NOT NULL,
-            category TEXT,
-            source TEXT,
-            last_updated TEXT,
-            record_count INTEGER,
-            file_size_mb REAL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    # TODO: Execute the SQL statement
-    cursor.execute(statement)
-    # TODO: Commit the changes
-    conn.commit()
-    # TODO: Print success message
-    return print("✅ Datasets metadata table created successfully!")
-    pass
 
-
-def create_it_tickets_table(conn):
-    """
-    Create the it_tickets table.
-    
-    TODO: Implement this function following the users table example.
-    
-    Required columns:
-    - id: INTEGER PRIMARY KEY AUTOINCREMENT
-    - ticket_id: TEXT UNIQUE NOT NULL
-    - priority: TEXT (e.g., 'Critical', 'High', 'Medium', 'Low')
-    - status: TEXT (e.g., 'Open', 'In Progress', 'Resolved', 'Closed')
-    - category: TEXT (e.g., 'Hardware', 'Software', 'Network')
-    - subject: TEXT NOT NULL
-    - description: TEXT
-    - created_date: TEXT (format: YYYY-MM-DD)
-    - resolved_date: TEXT
-    - assigned_to: TEXT
-    - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    """
-    # TODO: Implement following the users table pattern
-    # TODO: Get a cursor from the connection
-    conn = connect_database()
-    cursor = conn.cursor()
-    # TODO: Write CREATE TABLE IF NOT EXISTS SQL statement
-    # Follow the pattern from create_users_table()
-    statement = ("""
-        CREATE TABLE IF NOT EXISTS it_tickets (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            ticket_id TEXT UNIQUE NOT NULL,
-            priority TEXT,
-            status TEXT,
-            category TEXT,
-            subject TEXT NOT NULL,
-            description TEXT,
-            created_date TEXT,
-            resolved_date TEXT,
-            assigned_to TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    # TODO: Execute the SQL statement
-    cursor.execute(statement)
-    # TODO: Commit the changes
-    conn.commit()
-    # TODO: Print success message
-    return print("✅ It tickets table created successfully!")
-    pass
