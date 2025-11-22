@@ -1,4 +1,6 @@
-Stepan,$2b$12$4k3uX3Gl4f6t5IoxUkUFke1qOh75Z1bFCNJ6G6sZ2PKuVt8TSw2ay
-Adam,$2b$12$iJV7BHvxJoCCiTllZroKruJRBSai82Eq17REAAvcZ7Ah4BMQS0m8e
-Anna,$2b$12$3o4dSgUozXOE3G7hmqMW/eh5DmXRBQsxALxWaLBB5wN922iBad0Pm
-alice,$2b$12$0xvrYTzmEqUUBruCfZrOheFMgR67XxMkuwcnGZ2dLxDhGOmr2P4N2
+stepan,$2b$12$rMsYHuRHhb0FOvMuzs88w.HOAyS0KXYKfaNmUflyG3ni30BQygAoe, user
+jack,$2b$12$lKQ3p0nF/lPok/f.AAEvDOTqEcaj0LUn8J/JFFe0pO6DobV7oUoaG, admin
+anna,$2b$12$F8Y5yommEHQ.Pn.N5svfkup66HfV.4IkNB7LFMNXHW12vkiSXyulW, user
+vin,$2b$12$c0ixEAWrDor3LsmI.pwB0OVPEQdbogFJ0U6BUZpd0b3j0SoLWV.HK, user
+john,$2b$12$BuHIKLaP.Suq5oWbuCBMK.i.ql3IGc8j2aX1bcFeVwh4p2WEhJZYm, user
+alex,$2b$12$33x6PSNd8n1gXKbS4ezNYuBntHPeAHnMAxAlgrvVuAdzDMpFLZ866, admin

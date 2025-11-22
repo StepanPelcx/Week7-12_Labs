@@ -12,9 +12,9 @@ def main():
     conn = connect_database()
     create_all_tables(conn)
     conn.close()
-
+    
     # 2. Migrate users
-    migrate_users_from_file()
+    migrate_users_from_file(connect_database())
 
     # 3. Test authentication
     success, msg = register_user("alice", "SecurePass123!", "analyst")

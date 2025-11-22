@@ -39,7 +39,7 @@ def create_cyber_incidents_table(conn):
     - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     """
     # TODO: Get a cursor from the connection
-    conn = connect_database()
+    #conn = connect_database()
     cursor = conn.cursor()
     # TODO: Write CREATE TABLE IF NOT EXISTS SQL statement
     # Follow the pattern from create_users_table()
@@ -51,7 +51,7 @@ def create_cyber_incidents_table(conn):
             severity TEXT,
             status TEXT,
             description TEXT,
-            reposted_by TEXT,
+            reported_by TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
@@ -82,7 +82,7 @@ def create_datasets_metadata_table(conn):
     """
     # TODO: Implement following the users table pattern
     # TODO: Get a cursor from the connection
-    conn = connect_database()
+    #conn = connect_database()
     cursor = conn.cursor()
     # TODO: Write CREATE TABLE IF NOT EXISTS SQL statement
     # Follow the pattern from create_users_table()
@@ -128,7 +128,7 @@ def create_it_tickets_table(conn):
     """
     # TODO: Implement following the users table pattern
     # TODO: Get a cursor from the connection
-    conn = connect_database()
+    #conn = connect_database()
     cursor = conn.cursor()
     # TODO: Write CREATE TABLE IF NOT EXISTS SQL statement
     # Follow the pattern from create_users_table()
@@ -154,4 +154,3 @@ def create_it_tickets_table(conn):
     # TODO: Print success message
     return print("✅ It tickets table created successfully!")
     pass
-
