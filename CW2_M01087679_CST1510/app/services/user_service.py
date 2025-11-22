@@ -106,9 +106,13 @@ def login_user(username, password):
         return True, f"Welcome, {username}!"
     else:
         return False, "Invalid password."
+    
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATA_DIR = BASE_DIR / "DATA"
 
 
-def migrate_users_from_file(conn, filepath="DATA/users.txt"):
+def migrate_users_from_file(conn, filepath=DATA_DIR / "users.txt"):
     """
     Migrate users from users.txt to the database.
     
@@ -118,6 +122,7 @@ def migrate_users_from_file(conn, filepath="DATA/users.txt"):
         conn: Database connectionx
         filepath: Path to users.txt file
     """
+
     if not filepath.exists():
         print(f"⚠️  File not found: {filepath}")
         print("   No users to migrate.")
@@ -134,15 +139,16 @@ def migrate_users_from_file(conn, filepath="DATA/users.txt"):
             
             # Parse line: username,password_hash
             parts = line.split(',')
-            if len(parts) >= 2:
+            if len(parts) >= 3:
                 username = parts[0]
                 password_hash = parts[1]
+                role = parts[2]
                 
                 # Insert user (ignore if already exists)
                 try:
                     cursor.execute(
                         "INSERT OR IGNORE INTO users (username, password_hash, role) VALUES (?, ?, ?)",
-                        (username, password_hash, 'user')
+                        (username, password_hash, role)
                     )
                     if cursor.rowcount > 0:
                         migrated_count += 1

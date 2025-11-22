@@ -1,5 +1,4 @@
-Stepan,$2b$12$4k3uX3Gl4f6t5IoxUkUFke1qOh75Z1bFCNJ6G6sZ2PKuVt8TSw2ay
-Adam,$2b$12$iJV7BHvxJoCCiTllZroKruJRBSai82Eq17REAAvcZ7Ah4BMQS0m8e
-Anna,$2b$12$3o4dSgUozXOE3G7hmqMW/eh5DmXRBQsxALxWaLBB5wN922iBad0Pm
-alice,$2b$12$0xvrYTzmEqUUBruCfZrOheFMgR67XxMkuwcnGZ2dLxDhGOmr2P4N2
-Jack,$2b$12$oV2pafPI181An93ZKENAZe/63pTHPwrJEsmC8TIV/qQ8W5bgfmZpO
+Stepan,$2b$12$rMsYHuRHhb0FOvMuzs88w.HOAyS0KXYKfaNmUflyG3ni30BQygAoe, user
+Jack,$2b$12$lKQ3p0nF/lPok/f.AAEvDOTqEcaj0LUn8J/JFFe0pO6DobV7oUoaG, admin
+Anna,$2b$12$F8Y5yommEHQ.Pn.N5svfkup66HfV.4IkNB7LFMNXHW12vkiSXyulW, user
+Vin,$2b$12$c0ixEAWrDor3LsmI.pwB0OVPEQdbogFJ0U6BUZpd0b3j0SoLWV.HK, user

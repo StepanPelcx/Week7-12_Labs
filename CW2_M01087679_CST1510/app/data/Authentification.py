@@ -6,10 +6,9 @@ import os
 import time
 from pathlib import Path
 
-USER_DATA_PATH = Path("DATA").resolve()
-USER_DATA_FILE = USER_DATA_PATH / "users.txt"
-
-
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATA_DIR = BASE_DIR / "DATA"
+USER_DATA_FILE = DATA_DIR / "users.txt"
 
 def hash_password(plain_text_password):
     """Returns a hashed password, created from plain text password."""
@@ -33,23 +32,6 @@ def verify_password(plain_text_password, hashed_password):
     match = bcrypt.checkpw(password_bytes, hashed_password)
     # This function extracts the salt from the hash and compares
     return match
-
-
-"""
-# TEMPORARY TEST CODE - Remove after testing
-test_password = "SecurePassword123"
-# Test hashing
-hashed = hash_password(test_password)
-print(f"Original password: {test_password}")
-print(f"Hashed password: {hashed}")
-print(f"Hash length: {len(hashed)} characters")
-# Test verification with correct password
-is_valid = verify_password(test_password, hashed)
-print(f"\nVerification with correct password: {is_valid}")
-# Test verification with incorrect password
-is_invalid = verify_password("WrongPassword", hashed)
-print(f"Verification with incorrect password: {is_invalid}")
-"""
 
 
 def user_exists(username):
@@ -78,18 +60,19 @@ def register_user(username, password):
     """Returns if the user has been registered."""
     # TODO: Check if the username already exists
     if user_exists(username) == True:
-        return False, print(f"The user {username} already exists.")
+        print(f"The user {username} already exists.")
+        return False
     # TODO: Hash the password
     hashed_str = hash_password(password)
 
-    role = input("Please enter a role of this user:")
+    role = input("Please enter a role of this user:").lower().strip()
 
     # TODO: Append the new user to the file
     with open(USER_DATA_FILE, "a") as f:
         f.write(f"{username},{hashed_str}, {role}\n")
     # Format: username,hashed_password
-    return True, print(f"The user {username} succesfully registered!")
-
+    print(f"The user {username} succesfully registered!")
+    return True
 
 def login_user(username, password):
     """Returns if the has been registered successfully."""
@@ -98,9 +81,11 @@ def login_user(username, password):
         with open(USER_DATA_FILE, "r") as f:
             user = f.read()
             if not user:
-                return False, print("No users are registered.")
+                print("No users are registered.")
+                return None
     except FileNotFoundError:
-        return "No users are registered."
+        print("No users are registered.")
+        return None
     # TODO: Search for the username in the file
     with open(USER_DATA_FILE, "r") as f:
         for line in f:
@@ -262,7 +247,7 @@ def main():
             while True:
                 # Registration flow
                 print("\n--- USER REGISTRATION ---")
-                username = input("Enter a username: ").strip()
+                username = input("Enter a username: ").lower().strip()
         # Validate username
                 is_valid, error_msg = validate_username(username)
                 if not is_valid:
@@ -297,18 +282,21 @@ def main():
         elif choice == '2':
             while True:
                 if login_count < 3:
-                    login_count += 1
                     # Login flow
                     print("\n--- USER LOGIN ---")
-                    username = input("Enter your username: ").strip()
+                    username = input("Enter your username: ").lower().strip()
                     password = input("Enter your password: ").strip()
                     # Attempt login
-                    if login_user(username, password):
+                    login = login_user(username, password)
+                    if login == None:
+                        break
+                    elif login:
                         create_session(username)
                         print("\nYou are now logged in.")
                         print("(In a real application, you would now access the ...")
                         break
                     else:
+                        login_count += 1
                         continue
                 else:
                     print("You attempted to login 3 times unsuccessfully. Wait for 5 minutes to try again.")
@@ -322,9 +310,9 @@ def main():
                                 wait_sec = 0
                                 wait_min = 5
                                 count = 1
-                                input(f"Please wait for another {wait_min:.0f} minutes and {wait_sec:.0f} seconds. Press enter after the timer reaches 0.")
+                                input(f"Please wait for another {wait_min:.0f} minutes and {wait_sec:.0f} seconds. Press enter after the timer reaches zero.")
                             else:
-                                input(f"Please wait for another {wait_min:.0f} minutes and {wait_sec:.0f} seconds. Press enter after the timer reaches 0.")
+                                input(f"Please wait for another {wait_min:.0f} minutes and {wait_sec:.0f} seconds. Press enter after the timer reaches zero.")
 
                         else:
                             login_count = 0
