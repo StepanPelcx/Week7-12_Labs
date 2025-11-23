@@ -1,6 +1,7 @@
 from pathlib import Path
 import sqlite3
 from app.data.db import connect_database
+import bcrypt
 
 
 # Define paths
