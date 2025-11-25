@@ -22,6 +22,8 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # ═══════════════════════════════════════════════# SIDEBAR: Chat Controls# ═══════════════════════════════════════════════
 with st.sidebar:
     st.title("💬 Chat Controls")
+
+    
     
     # Show message count
     message_count = sum(1 for message in st.session_state.get("messages", []) if message["role"] in ["user", "assistant"])
