@@ -107,6 +107,7 @@ def create_datasets_metadata_table(conn):
     pass
 
 
+
 def create_it_tickets_table(conn):
     """
     Create the it_tickets table.
