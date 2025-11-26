@@ -80,7 +80,7 @@ if st.session_state.show_password_change:
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Yes, confirm change"):
-                if change_password(st.session_state.username, new_password):
+                if change_password(st.session_state.username.strip().lower(), new_password):
                     st.success("✅Your password changed successfuly!✅")
                     st.session_state.show_password_change = False
                     del st.session_state.confirm_password_change
@@ -91,5 +91,3 @@ if st.session_state.show_password_change:
                 st.session_state.show_password_change = False
                 del st.session_state.confirm_password_change
                 st.stop()
-    
-    

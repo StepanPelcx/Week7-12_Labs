@@ -100,6 +100,8 @@ def change_password(username, new_password):
     cursor = conn.cursor()
     #changing the password
     cursor.execute("""UPDATE users SET password_hash = ? WHERE username = ?""", (new_password_hashed, username))
+    conn.commit()
+    conn.close()
     return True
 
 
