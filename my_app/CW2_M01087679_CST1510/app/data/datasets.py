@@ -23,7 +23,7 @@ def insert_dataset(conn, dataset_name, category, source, last_updated, record_co
 
 
 def get_all_datasets():
-    """Get all datasets as DataFrame."""
+    """Get all incidents as DataFrame."""
     conn = connect_database()
     df = pd.read_sql_query(
         "SELECT * FROM datasets_metadata ORDER BY id DESC", conn

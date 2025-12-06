@@ -1,0 +1,4 @@
+Stepan,$2b$12$rMsYHuRHhb0FOvMuzs88w.HOAyS0KXYKfaNmUflyG3ni30BQygAoe, user
+Jack,$2b$12$lKQ3p0nF/lPok/f.AAEvDOTqEcaj0LUn8J/JFFe0pO6DobV7oUoaG, admin
+Anna,$2b$12$F8Y5yommEHQ.Pn.N5svfkup66HfV.4IkNB7LFMNXHW12vkiSXyulW, user
+Vin,$2b$12$c0ixEAWrDor3LsmI.pwB0OVPEQdbogFJ0U6BUZpd0b3j0SoLWV.HK, user

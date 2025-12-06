@@ -1,8 +1,8 @@
 from user_handling.db import connect_database
 
-def create_users_table():
+
+def create_users_table(conn):
     """Create users table."""
-    conn = connect_database()
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -15,17 +15,15 @@ def create_users_table():
     conn.commit()
     return print("✅ Users table created successfully!")
 
-def create_all_tables():
+def create_all_tables(conn):
     """Create all tables."""
-    conn = connect_database()
     create_users_table(conn)
     create_cyber_incidents_table(conn)
     create_datasets_metadata_table(conn)
     create_it_tickets_table(conn)
     return print("✅ All tables created successfully!")
 
-
-def create_cyber_incidents_table():
+def create_cyber_incidents_table(conn):
     """
     Create the cyber_incidents table.
     
@@ -41,8 +39,6 @@ def create_cyber_incidents_table():
     - reported_by: TEXT (username of reporter)
     - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     """
-
-    conn = connect_database()
     # TODO: Get a cursor from the connection
     #conn = connect_database()
     cursor = conn.cursor()
@@ -69,7 +65,7 @@ def create_cyber_incidents_table():
     pass
 
 
-def create_datasets_metadata_table():
+def create_datasets_metadata_table(conn):
     """
     Create the datasets_metadata table.
     
@@ -85,8 +81,6 @@ def create_datasets_metadata_table():
     - file_size_mb: REAL
     - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     """
-
-    conn = connect_database()
     # TODO: Implement following the users table pattern
     # TODO: Get a cursor from the connection
     #conn = connect_database()
@@ -114,8 +108,7 @@ def create_datasets_metadata_table():
     pass
 
 
-
-def create_it_tickets_table():
+def create_it_tickets_table(conn):
     """
     Create the it_tickets table.
     
@@ -134,8 +127,6 @@ def create_it_tickets_table():
     - assigned_to: TEXT
     - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     """
-    
-    conn = connect_database()
     # TODO: Implement following the users table pattern
     # TODO: Get a cursor from the connection
     #conn = connect_database()
